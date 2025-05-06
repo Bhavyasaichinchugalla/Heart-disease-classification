@@ -66,6 +66,9 @@ The model used is a **RandomForestClassifier**, a supervised learning algorithm 
 
 ## Deployment
 This application is deployed using [Railway](https://railway.app). Gunicorn is used as the production WSGI server, and a `Procfile` specifies the entry point.
+## live website - [https://heart-disease-classification-production.up.railway.app/](https://heart-disease-classification-production.up.railway.app/)
+
+
 
 ## Dataset Source
 [Cleveland Heart Disease Dataset - UCI Repository](https://archive.ics.uci.edu/ml/datasets/heart+disease)
