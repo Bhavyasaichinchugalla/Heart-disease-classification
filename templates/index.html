@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Risk Assessment</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f3f3f3;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2b5797;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #2b5797;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1a3f73;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 60%;
+            max-width: 400px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: -20px;
+        }
+
+        .close:hover {
+            color: black;
+            cursor: pointer;
+        }
+
+        .high-risk {
+            color: red;
+            font-weight: bold;
+        }
+
+        .low-risk {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Heart Disease Risk Checker</h1>
+        <form method="POST">
+
+            <!-- Age -->
+            <div class="form-group">
+                <input type="number" name="age" placeholder="Age" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Age:</strong><br>
+                        Enter your age in years. Older age increases heart risk.
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Sex -->
+            <div class="form-group">
+                <select name="sex" required>
+                    <option value="">Select Sex</option>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Sex:</strong><br>
+                        1 = Male, 0 = Female. Men may have higher risk.
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Chest Pain -->
+            <div class="form-group">
+                <select name="cp" required>
+                    <option value="">Select Chest Pain Type</option>
+                    <option value="0">Typical Angina</option>
+                    <option value="1">Atypical Angina</option>
+                    <option value="2">Non-Anginal</option>
+                    <option value="3">Asymptomatic</option>
+                </select>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Chest Pain:</strong><br>
+                        0: Typical<br>
+                        1: Atypical<br>
+                        2: Non-Anginal<br>
+                        3: Asymptomatic (most risky)
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Resting BP -->
+            <div class="form-group">
+                <input type="number" step="0.1" name="trestbps" placeholder="Resting BP" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Resting BP:</strong><br>
+                        Measured in mmHg. Normal is ~120.
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Cholesterol -->
+            <div class="form-group">
+                <input type="number" step="0.1" name="chol" placeholder="Cholesterol" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Cholesterol:</strong><br>
+                        mg/dl. Over 200 is high.
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Fasting Blood Sugar -->
+            <div class="form-group">
+                <input type="number" name="fbs" placeholder="Fasting Blood Sugar (1 or 0)" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Fasting Blood Sugar:</strong><br>
+                        1 = >120 mg/dl<br>
+                        0 = Normal
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Resting ECG -->
+            <div class="form-group">
+                <input type="number" name="restecg" placeholder="ECG Result (0–2)" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>ECG:</strong><br>
+                        0: Normal<br>
+                        1: ST-T abnormality<br>
+                        2: LV hypertrophy
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Max Heart Rate -->
+            <div class="form-group">
+                <input type="number" name="thalach" placeholder="Max Heart Rate" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Max Heart Rate:</strong><br>
+                        Measured in bpm. Usually ~150–190.
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Exercise Angina -->
+            <div class="form-group">
+                <input type="number" name="exang" placeholder="Exercise Angina (1 or 0)" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Exercise-Induced Angina:</strong><br>
+                        1 = Yes, 0 = No
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Oldpeak -->
+            <div class="form-group">
+                <input type="number" step="0.1" name="oldpeak" placeholder="Oldpeak" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Oldpeak:</strong><br>
+                        ST depression from exercise. >2.0 is risky.
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Slope -->
+            <div class="form-group">
+                <input type="number" name="slope" placeholder="Slope (0–2)" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Slope:</strong><br>
+                        0: Upsloping<br>
+                        1: Flat<br>
+                        2: Downsloping (worst)
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Major Vessels -->
+            <div class="form-group">
+                <input type="number" name="ca" placeholder="Major Vessels (0–3)" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Number of Major Vessels:</strong><br>
+                        Colored by fluoroscopy. 0–3.
+                    </span>
+                </div>
+            </div>
+        
+            <!-- Thalassemia -->
+            <div class="form-group">
+                <input type="number" name="thal" placeholder="Thal (1–3)" required>
+                <div class="info-box">ℹ️
+                    <span class="info-content">
+                        <strong>Thalassemia:</strong><br>
+                        1 = Normal<br>
+                        2 = Fixed defect<br>
+                        3 = Reversable defect
+                    </span>
+                </div>
+            </div>
+        
+            <button type="submit" id="submitBtn">
+                <span id="btnText">Check Risk</span>
+                <span id="spinner" class="spinner" style="display: none;"></span>
+            </button>
+            
+        </form>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeBtn">&times;</span>
+            <h2>Prediction Result</h2>
+            <p id="modalText"
+               class="{{ 'high-risk' if prediction == 'High Risk' else 'low-risk' if prediction == 'Low Risk' else '' }}">
+               {{ prediction }}
+            </p>
+        </div>
+    </div>
+
+    {% if prediction %}
+    <div style="margin-top: 40px; text-align: center;">
+        <h3>Feature Importance</h3>
+        <img src="/static/shap_plot.png" alt="SHAP Plot" style="max-width: 100%; border-radius: 10px;">
+    </div>
+    {% endif %}
+
+
+    <script>
+        // Show the modal if a prediction was returned
+        window.onload = function () {
+            var prediction = "{{ prediction }}";
+            if (prediction && prediction !== "None") {
+                var modal = document.getElementById("resultModal");
+                modal.style.display = "block";
+            }
+
+            // Close modal logic
+            document.getElementById("closeBtn").onclick = function () {
+                document.getElementById("resultModal").style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == document.getElementById("resultModal")) {
+                    document.getElementById("resultModal").style.display = "none";
+                }
+            }
+        };
+        document.querySelector("form").addEventListener("submit", function () {
+        const btnText = document.getElementById("btnText");
+        const spinner = document.getElementById("spinner");
+        btnText.textContent = "Processing...";
+        spinner.style.display = "inline-block";
+});
+    </script>
+</body>
+</html>
